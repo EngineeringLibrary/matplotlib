@@ -16,3 +16,6 @@ dist_doc_DATA = \
 # Remove doc directory on uninstall
 uninstall-local:
 	-rm -r $(docdir)
+
+
+AM_CXXFLAGS = -lmgl 

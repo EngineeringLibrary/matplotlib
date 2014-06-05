@@ -1,0 +1,9 @@
+*.o
+*~
+.anjuta
+*.db
+.cproject
+.project
+.settings
+src/.deps
+src/graphlib

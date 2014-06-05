@@ -19,9 +19,41 @@
 
 #include "matrix-plot.h"
 
-MatrixPlot::MatrixPlot(const Matrix &referenceMatrix)
+MatrixPlot::MatrixPlot()
 {
-	this->matrix = referenceMatrix;
-	this->rows = this->matrix.getRows();
-	this->cols = this->matrix.getCols();
+	this->Alpha(true);
+	//this->Box();
+	this->Light(true);
+}
+
+void MatrixPlot::saveToFile(const string filename)
+{
+	this->WritePNG(filename.c_str());
+}
+
+void MatrixPlot::render(Matrix & referenceMatrix, const string plotTitle){
+
+	int matrixRows = referenceMatrix.getRows();
+	int matrixCols = 2;
+
+	mglData matrixDisplayData(matrixRows, matrixCols);
+
+	float matrixData[matrixRows][matrixCols];
+	for (int i=0; i < matrixRows; i++)
+	{
+		for (int j=0; j < matrixCols; j++)
+		{
+			matrixData[i][j] = referenceMatrix.getMat(i+1,j+1);
+			matrixDisplayData.SetVal(matrixData[i][j], i, j, i);
+		}
+	}
+
+	this->SetOrigin(0,0,0);
+
+	this->SubPlot(1, 1, 0,""); //cols; lines; 3o 0 <t 1 t> 2 <b 3 b> (POSICAO INDICE)
+	this->Title(plotTitle.c_str());
+
+	this->Plot(matrixDisplayData);
+	this->Box();
+
 }

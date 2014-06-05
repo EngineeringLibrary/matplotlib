@@ -19,7 +19,7 @@ graphlib_SOURCES = \
 	matrix-plot.h \
 	lib/Matrizes/matrix.cpp
 
-graphlib_LDFLAGS = 
+graphlib_LDFLAGS = -lmgl
 
 graphlib_LDADD = 
 

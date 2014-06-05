@@ -20,19 +20,22 @@
 #ifndef _MATRIX_PLOT_H_
 #define _MATRIX_PLOT_H_
 #include "lib/Matrizes/matrix.h"
+#include <iostream>
+#include <mgl2/mgl.h>
 
-class MatrixPlot
+class MatrixPlot : public mglGraph
 {
 public:
-	int rows, cols;
 
-	MatrixPlot(const Matrix &referenceMatrix);
+	MatrixPlot();
+
+	void render(Matrix &, const string = "Plot Default");
+
+	void saveToFile(const string);
 	
-protected:
-	Matrix matrix;
 	
 private:
-
+	
 };
 
 #endif // _MATRIX_PLOT_H_
