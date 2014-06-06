@@ -29,7 +29,7 @@ public:
 
 	MatrixPlot();
 
-	void render(Matrix &, const string = "Plot Default");
+	void plot1d(Matrix &, const string = "");
 
 	void saveToFile(const string);
 	

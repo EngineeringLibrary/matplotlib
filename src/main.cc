@@ -4,23 +4,32 @@
 
 int main()
 {
-	Matrix matrix = Matrix(10, 2);
+	Matrix matrix = Matrix(200, 2);
 
 	//Inicialização teste;
-	for (int i=1; i<= 10; i++)
-		for (int j=1; j <= 2; j++)
-			if (j == 1)
-				matrix.add(i,j, i);
-			else
-				matrix.add(i,j, i*2);
+	for (int i=1; i <= 200; i++)
+	{
 
+		float xCoord = (float) (i -100)/10;
 
+		matrix.add(i, 1, xCoord); //Coordenada X
+		matrix.add(i, 2, sin(2*xCoord) + cos(xCoord)); //Coordenada Y
+	}
+
+	//Instanciando plotter
 	MatrixPlot matrixplot = MatrixPlot();
-	matrixplot.render(matrix);
+
+	matrixplot.SetRange('x', -1, 2);
+	matrixplot.SetRange('y', -2, 2);
+
+	//Plotando matrix 1d
+	matrixplot.plot1d(matrix, "Pega, PORRA!");
 
 	matrixplot.saveToFile ("src/teste.png");
 
-	cout << "Deve ter salvado o arquivo";
-	
+	matrix.print();
+
+	cout << "Salvando no arquivo";
+
 	return 0;
 }

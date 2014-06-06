@@ -265,7 +265,11 @@ graphlib_SOURCES = \
 	main.cc \
 	matrix-plot.cc \
 	matrix-plot.h \
-	lib/Matrizes/matrix.cpp
+	lib/Matrizes/matrix.cpp \
+	mgl.h \
+	mgl2 \
+	data.h \
+	iostream
 
 graphlib_LDFLAGS = -lmgl
 graphlib_LDADD = 
