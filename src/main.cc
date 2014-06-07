@@ -19,11 +19,8 @@ int main()
 	//Instanciando plotter
 	MatrixPlot matrixplot = MatrixPlot();
 
-	matrixplot.SetRange('x', -1, 2);
-	matrixplot.SetRange('y', -2, 2);
-
 	//Plotando matrix 1d
-	matrixplot.plot1d(matrix, "Pega, PORRA!");
+	matrixplot.plot1d(matrix);
 
 	matrixplot.saveToFile ("src/teste.png");
 

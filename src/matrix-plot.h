@@ -31,11 +31,21 @@ public:
 
 	void plot1d(Matrix &, const string = "");
 
+	void setAutoRange(bool);
 	void saveToFile(const string);
 	
 	
 private:
-	
+	bool autoRange;
+};
+
+struct range
+{
+  float x_min;
+  float x_max;
+
+  float y_min;
+  float y_max;
 };
 
 #endif // _MATRIX_PLOT_H_

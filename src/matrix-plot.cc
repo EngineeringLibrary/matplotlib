@@ -24,6 +24,8 @@ MatrixPlot::MatrixPlot()
 	this->Alpha(0);
 	this->Light(true);
 
+	this->autoRange = true;
+
 }
 
 void MatrixPlot::saveToFile(const string filename)
@@ -34,12 +36,15 @@ void MatrixPlot::saveToFile(const string filename)
 void MatrixPlot::plot1d(Matrix & referenceMatrix, const string plotTitle){
 
 	int matrixRows = referenceMatrix.getRows();
-	int matrixCols = 2;
+	int matrixCols = referenceMatrix.getCols();
 
 	mglData matrix_X_coordinates(matrixRows);
 	mglData matrix_Y_coordinates(matrixRows);
 
+	range matrixRange;
+
 	float matrixData[matrixRows][matrixCols];
+
 	for (int i=0; i < matrixRows; i++)
 	{
 
@@ -48,9 +53,48 @@ void MatrixPlot::plot1d(Matrix & referenceMatrix, const string plotTitle){
 			float dataPoint = referenceMatrix.getMat(i+1,j+1);
 
 			if (j == 0)
+			{
+
+				//Min_x
+				try {
+					if (dataPoint < matrixRange.x_min)
+						matrixRange.x_min = dataPoint;
+				} catch (...) {
+					matrixRange.x_min = dataPoint;
+				}
+
+				//Max_x
+				try {
+					if (dataPoint > matrixRange.x_max)
+						matrixRange.x_max = dataPoint;
+				} catch (...) {
+					matrixRange.x_max = dataPoint;
+				}
+
+
 				matrix_X_coordinates.a[i] = dataPoint;
+			}
 			else
+			{
+				//Min_x
+				try {
+					if (dataPoint < matrixRange.y_min)
+						matrixRange.y_min = dataPoint;
+				} catch (...) {
+					matrixRange.y_min = dataPoint;
+				}
+
+				//Max_x
+				try {
+					if (dataPoint > matrixRange.y_max)
+						matrixRange.y_max = dataPoint;
+				} catch (...) {
+					matrixRange.y_max = dataPoint;
+				}
+
 				matrix_Y_coordinates.a[i] = dataPoint;
+			}
+
 		}
 
 	}
@@ -63,7 +107,18 @@ void MatrixPlot::plot1d(Matrix & referenceMatrix, const string plotTitle){
 		this->Title(plotTitle.c_str());
 
 	this->Axis("xy");
+
+	if (this->autoRange)
+	{
+		this->SetRange('x', matrixRange.x_min, matrixRange.x_max);
+		this->SetRange('y', matrixRange.y_min, matrixRange.y_max);
+	}
+
 	this->Plot(matrix_X_coordinates, matrix_Y_coordinates);
 
+}
 
+void MatrixPlot::setAutoRange(bool option)
+{
+	this->autoRange = option;
 }
