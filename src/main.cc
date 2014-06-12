@@ -1,5 +1,6 @@
 #include <iostream>
 #include "matrix-plot.h"
+//#include "MatrixPlotWindow.h"
 #include "lib/Matrizes/matrix.h"
 
 int main()
@@ -17,16 +18,16 @@ int main()
 	}
 
 	//Instanciando plotter
-	MatrixPlot matrixplot = MatrixPlot();
+	MatrixPlot matrixplot = MatrixPlot(2, 2); //Define subplot Cols; subplot Rows;
 
 	//Plotando matrix 1d
-	matrixplot.plot1d(matrix);
+	matrixplot.plot1d(matrix, 0); //Plota e define o indice do subplot
+	matrixplot.plot1d(matrix, 1);
+	matrixplot.plot1d(matrix, 2);
+	matrixplot.plot1d(matrix, 3);
 
-	matrixplot.saveToFile ("src/teste.png");
 
-	matrix.print();
-
-	cout << "Salvando no arquivo";
+	matrixplot.Run();
 
 	return 0;
 }

@@ -18,22 +18,21 @@
  */
 
 #include "matrix-plot.h"
+#include "MatrixPlotWindow.h"
+#include <mgl2/fltk.h>
 
-MatrixPlot::MatrixPlot()
+MatrixPlot::MatrixPlot(int subplotCols, int subplotRows)
 {
 	this->Alpha(0);
 	this->Light(true);
 
 	this->autoRange = true;
+	this->subplotCols = subplotCols;
+	this->subplotRows = subplotRows;
 
 }
 
-void MatrixPlot::saveToFile(const string filename)
-{
-	this->WritePNG(filename.c_str());
-}
-
-void MatrixPlot::plot1d(Matrix & referenceMatrix, const string plotTitle){
+void MatrixPlot::plot1d(Matrix & referenceMatrix, int subplotIndex){
 
 	int matrixRows = referenceMatrix.getRows();
 	int matrixCols = referenceMatrix.getCols();
@@ -101,10 +100,12 @@ void MatrixPlot::plot1d(Matrix & referenceMatrix, const string plotTitle){
 
 	this->SetOrigin(0,0,0);
 
-	this->SubPlot(1, 1, 0,""); //cols; lines; 3o 0 <t 1 t> 2 <b 3 b> (POSICAO INDICE)
+	//Subplotagem
 
-	if (plotTitle != "")
-		this->Title(plotTitle.c_str());
+	this->SubPlot(
+			this->subplotCols,
+			this->subplotRows,
+			subplotIndex, "");
 
 	this->Axis("xy");
 
