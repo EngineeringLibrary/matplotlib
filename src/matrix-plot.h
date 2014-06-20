@@ -31,6 +31,9 @@ public:
 	MatrixPlot(int subplotCols = 1, int subplotRows = 1);
 
 	void plot1d(Matrix &, int = 0);
+	void plot1d(Matrix &, Matrix &);
+
+	void plotbox(Matrix &, int = 0);
 
 	void setAutoRange(bool);
 

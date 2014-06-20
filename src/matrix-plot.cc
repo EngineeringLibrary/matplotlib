@@ -119,6 +119,171 @@ void MatrixPlot::plot1d(Matrix & referenceMatrix, int subplotIndex){
 
 }
 
+void MatrixPlot::plot1d(Matrix & xMatrix, Matrix & yMatrix){
+
+	if (xMatrix.getRows() != yMatrix.getRows() && xMatrix.getCols() != yMatrix.getCols())
+		cerr << "Matrizes de coordenadas incompativeis. Encerrando aplicativo";
+
+	int matrixPlotRows = xMatrix.getRows();
+	int subplotAmount = xMatrix.getCols();
+
+	mglData matrix_X_coordinates(matrixPlotRows);
+	mglData matrix_Y_coordinates(matrixPlotRows);
+
+	range matrixRange;
+
+	float matrixDataPoint;
+	for (int subplotIndex=0; subplotIndex < subplotAmount; subplotIndex++)
+	{
+		for (int matrixPlotRowIndex=0; matrixPlotRowIndex < matrixPlotRows; matrixPlotRowIndex++)
+		{
+			float x = xMatrix.getMat((matrixPlotRowIndex+1), (subplotIndex+1));
+			float y = yMatrix.getMat((matrixPlotRowIndex+1), (subplotIndex+1));
+
+			matrix_X_coordinates.a[matrixPlotRowIndex] = x;
+			matrix_Y_coordinates.a[matrixPlotRowIndex] = y;
+
+			//minMax x
+			try {
+				if (x < matrixRange.x_min)
+					matrixRange.x_min = x;
+			} catch (...) {
+				matrixRange.x_min = x;
+			}
+
+			try {
+				if (x > matrixRange.x_max)
+					matrixRange.x_max = x;
+			} catch (...) {
+				matrixRange.x_max = x;
+			}
+
+			//minMax y
+			//minMax x
+			try {
+				if (y < matrixRange.y_min)
+					matrixRange.y_min = y;
+			} catch (...) {
+				matrixRange.y_min = y;
+			}
+
+			try {
+				if (y > matrixRange.y_max)
+					matrixRange.y_max = y;
+			} catch (...) {
+				matrixRange.y_max = y;
+			}
+		}
+
+		this->SetOrigin(0,0,0);
+
+		//Subplotagem
+
+		this->SubPlot(
+				this->subplotCols,
+				this->subplotRows,
+				0, "");
+
+		this->Axis("xy");
+
+		if (this->autoRange)
+		{
+			this->SetRange('x', matrixRange.x_min, matrixRange.x_max);
+			this->SetRange('y', matrixRange.y_min, matrixRange.y_max);
+		}
+
+		this->Plot(matrix_X_coordinates, matrix_Y_coordinates);
+	}
+
+
+}
+
+void MatrixPlot::plotbox(Matrix & referenceMatrix, int subplotIndex)
+{
+	int matrixRows = referenceMatrix.getRows();
+		int matrixCols = referenceMatrix.getCols();
+
+		mglData matrix_X_coordinates(matrixRows);
+		mglData matrix_Y_coordinates(matrixRows);
+
+		range matrixRange;
+
+		float matrixData[matrixRows][matrixCols];
+
+		for (int i=0; i < matrixRows; i++)
+		{
+
+			for (int j=0; j < matrixCols; j++)
+			{
+				float dataPoint = referenceMatrix.getMat(i+1,j+1);
+
+				if (j == 0)
+				{
+
+					//Min_x
+					try {
+						if (dataPoint < matrixRange.x_min)
+							matrixRange.x_min = dataPoint;
+					} catch (...) {
+						matrixRange.x_min = dataPoint;
+					}
+
+					//Max_x
+					try {
+						if (dataPoint > matrixRange.x_max)
+							matrixRange.x_max = dataPoint;
+					} catch (...) {
+						matrixRange.x_max = dataPoint;
+					}
+
+
+					matrix_X_coordinates.a[i] = dataPoint;
+				}
+				else
+				{
+					//Min_x
+					try {
+						if (dataPoint < matrixRange.y_min)
+							matrixRange.y_min = dataPoint;
+					} catch (...) {
+						matrixRange.y_min = dataPoint;
+					}
+
+					//Max_x
+					try {
+						if (dataPoint > matrixRange.y_max)
+							matrixRange.y_max = dataPoint;
+					} catch (...) {
+						matrixRange.y_max = dataPoint;
+					}
+
+					matrix_Y_coordinates.a[i] = dataPoint;
+				}
+
+			}
+
+		}
+
+		this->SetOrigin(0,0,0);
+
+		//Subplotagem
+
+		this->SubPlot(
+				this->subplotCols,
+				this->subplotRows,
+				subplotIndex, "");
+
+		this->Axis("xy");
+
+		if (this->autoRange)
+		{
+			this->SetRange('x', matrixRange.x_min, matrixRange.x_max);
+			this->SetRange('y', matrixRange.y_min, matrixRange.y_max);
+		}
+
+		this->Plot(matrix_X_coordinates, matrix_Y_coordinates);
+}
+
 void MatrixPlot::setAutoRange(bool option)
 {
 	this->autoRange = option;
