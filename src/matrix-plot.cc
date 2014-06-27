@@ -18,7 +18,6 @@
  */
 
 #include "matrix-plot.h"
-#include "MatrixPlotWindow.h"
 
 MatrixPlot::MatrixPlot(int subplotCols, int subplotRows)
 {
@@ -176,15 +175,6 @@ void MatrixPlot::plot1d(Matrix & xMatrix, Matrix & yMatrix){
 
 		this->SetOrigin(0,0,0);
 
-		//Subplotagem
-
-		/*this->SubPlot(
-				this->subplotCols,
-				this->subplotRows,
-				0, "");
-
-		this->Axis("xy");*/
-
 		string color = "";
 		switch (subplotIndex)
 		{
@@ -196,6 +186,9 @@ void MatrixPlot::plot1d(Matrix & xMatrix, Matrix & yMatrix){
 			break;
 		case 2:
 			color = "b";
+			break;
+		case 3:
+			color = "w";
 			break;
 		}
 
@@ -216,88 +209,27 @@ void MatrixPlot::plot1d(Matrix & xMatrix, Matrix & yMatrix){
 
 void MatrixPlot::plotbox(Matrix & referenceMatrix, int subplotIndex)
 {
-	int matrixRows = referenceMatrix.getRows();
-		int matrixCols = referenceMatrix.getCols();
+	int matrixPlotRows = referenceMatrix.getRows();
+	int subplotAmount = referenceMatrix.getCols();
 
-		mglData matrix_X_coordinates(matrixRows);
-		mglData matrix_Y_coordinates(matrixRows);
+	mglData dataBox(subplotAmount);
 
-		range matrixRange;
+	range matrixRange;
 
-		float matrixData[matrixRows][matrixCols];
+	for (int subplotIndex=0; subplotIndex < subplotAmount; subplotIndex++)
+	{
+		mglData dataItem(matrixPlotRows);
 
-		for (int i=0; i < matrixRows; i++)
+		for (int matrixPlotRowIndex=0; matrixPlotRowIndex < matrixPlotRows; matrixPlotRowIndex++)
 		{
-
-			for (int j=0; j < matrixCols; j++)
-			{
-				float dataPoint = referenceMatrix.getMat(i+1,j+1);
-
-				if (j == 0)
-				{
-
-					//Min_x
-					try {
-						if (dataPoint < matrixRange.x_min)
-							matrixRange.x_min = dataPoint;
-					} catch (...) {
-						matrixRange.x_min = dataPoint;
-					}
-
-					//Max_x
-					try {
-						if (dataPoint > matrixRange.x_max)
-							matrixRange.x_max = dataPoint;
-					} catch (...) {
-						matrixRange.x_max = dataPoint;
-					}
-
-
-					matrix_X_coordinates.a[i] = dataPoint;
-				}
-				else
-				{
-					//Min_x
-					try {
-						if (dataPoint < matrixRange.y_min)
-							matrixRange.y_min = dataPoint;
-					} catch (...) {
-						matrixRange.y_min = dataPoint;
-					}
-
-					//Max_x
-					try {
-						if (dataPoint > matrixRange.y_max)
-							matrixRange.y_max = dataPoint;
-					} catch (...) {
-						matrixRange.y_max = dataPoint;
-					}
-
-					matrix_Y_coordinates.a[i] = dataPoint;
-				}
-
-			}
-
+			float x = referenceMatrix.getMat((matrixPlotRowIndex+1), (subplotIndex+1));
+			dataItem.a[matrixPlotRowIndex] = x;
+			//dataBox.Set(&x, (long int)matrixPlotRowIndex, (long int)subplotIndex);
 		}
+	}
 
-		this->SetOrigin(0,0,0);
-
-		//Subplotagem
-
-		this->SubPlot(
-				this->subplotCols,
-				this->subplotRows,
-				subplotIndex, "");
-
-		this->Axis("xy");
-
-		if (this->autoRange)
-		{
-			this->SetRange('x', matrixRange.x_min, matrixRange.x_max);
-			this->SetRange('y', matrixRange.y_min, matrixRange.y_max);
-		}
-
-		this->Plot(matrix_X_coordinates, matrix_Y_coordinates);
+	this->Box();
+	this->BoxPlot(dataBox);
 
 }
 
