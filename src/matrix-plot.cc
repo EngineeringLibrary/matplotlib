@@ -19,7 +19,6 @@
 
 #include "matrix-plot.h"
 #include "MatrixPlotWindow.h"
-#include <mgl2/fltk.h>
 
 MatrixPlot::MatrixPlot(int subplotCols, int subplotRows)
 {
@@ -179,22 +178,39 @@ void MatrixPlot::plot1d(Matrix & xMatrix, Matrix & yMatrix){
 
 		//Subplotagem
 
-		this->SubPlot(
+		/*this->SubPlot(
 				this->subplotCols,
 				this->subplotRows,
 				0, "");
 
-		this->Axis("xy");
+		this->Axis("xy");*/
 
-		if (this->autoRange)
+		string color = "";
+		switch (subplotIndex)
+		{
+		case 0:
+			color = "r";
+			break;
+		case 1:
+			color = "g";
+			break;
+		case 2:
+			color = "b";
+			break;
+		}
+
+		if (this->autoRange && subplotIndex == (subplotAmount-1))
 		{
 			this->SetRange('x', matrixRange.x_min, matrixRange.x_max);
 			this->SetRange('y', matrixRange.y_min, matrixRange.y_max);
 		}
 
-		this->Plot(matrix_X_coordinates, matrix_Y_coordinates);
+		this->Axis("xy");
+		this->Plot(matrix_X_coordinates, matrix_Y_coordinates, color.c_str());
+		this->AddLegend("Plot",color.c_str());
 	}
 
+	this->Legend();
 
 }
 
@@ -282,9 +298,15 @@ void MatrixPlot::plotbox(Matrix & referenceMatrix, int subplotIndex)
 		}
 
 		this->Plot(matrix_X_coordinates, matrix_Y_coordinates);
+
 }
 
 void MatrixPlot::setAutoRange(bool option)
 {
 	this->autoRange = option;
+}
+
+void MatrixPlot::saveToFile(const string filename)
+{
+	this->WriteEPS(filename.c_str());
 }

@@ -16,26 +16,28 @@ int main()
 		float xCoord = (float) (i -100)/10;
 
 		matrix_x.add(i, 1, xCoord);
+		matrix_x.add(i, 2, xCoord); //Segundo plotter
+		matrix_x.add(i, 3, xCoord);
+
 		matrix_y.add(i, 1, sin(2*xCoord) + cos(xCoord));
+		matrix_y.add(i, 2, cos(2*xCoord) + sin(xCoord)); //Segundo plotter em Y. Alterando dados
+		matrix_y.add(i, 3, 1);
 	}
 
 	//Instanciando plotter
 	//MatrixPlot matrixplot = MatrixPlot(2, 2); //Define subplot Cols; subplot Rows;
 
 	MatrixPlot matrixplot = MatrixPlot();
+	matrixplot.setAutoRange(false);
+
+	matrixplot.SetRange('x', -10, 10);
+	matrixplot.SetRange('y', -2, 6);
+
 	matrixplot.plot1d(matrix_x, matrix_y);
 	cout << "Depois do plot" << endl;
-	//Matrix matrix_box = Matrix(10,2);
 
-	//matrixplot.plotbox(matrix);
+	matrixplot.saveToFile("teste.eps");
 
-	//Plotando matrix 1d
-	/*
-	matrixplot.plot1d(matrix, 0); //Plota e define o indice do subplot
-	matrixplot.plot1d(matrix, 1);
-	matrixplot.plot1d(matrix, 2);
-	matrixplot.plot1d(matrix, 3);
-	*/
 	matrixplot.Run();
 
 	return 0;

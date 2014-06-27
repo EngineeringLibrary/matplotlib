@@ -36,6 +36,7 @@ public:
 	void plotbox(Matrix &, int = 0);
 
 	void setAutoRange(bool);
+	void saveToFile(const string);
 
 private:
 	bool autoRange;
